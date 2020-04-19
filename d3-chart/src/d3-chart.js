@@ -142,6 +142,34 @@ async function renderChart() {
 
     // Add a legend at the end of each line
     //addLegendAtTheEndOfLine(g, source, xScale, yScale);
+
+    addHtmlTextBox(g,
+        width + 8,
+        0,
+        margin.right,
+        40,
+        'Fertility rate, total (births per woman)');
+
+    addHtmlTextBox(g,
+        8,
+        0,
+        640,
+        60,
+        '<b>Trade-off between fertility and lifespan: </b> Increased lifespan comes at the cost of reduced fertility.<br> (Data from: <em>https://datacatalog.worldbank.org/dataset/world-development-indicators<em>)');
+}
+
+function addHtmlTextBox(g, x, y, width, height, text) {
+    let fo = g.append('foreignObject')
+        .attr("transform", `translate(${x}, ${y})`)
+        .attr('width', width)
+        .attr('height', height)
+        .classed('full-container', true);
+
+    let divLegend = fo.append('xhtml:div')
+        .append('div')
+        .classed('legend_header_box', true)
+        .append('p')
+        .html(`${text}`);
 }
 
 function renderReferenceArea(g, width, yScale, reference_age) {
@@ -164,7 +192,7 @@ function getLastValidValue(d) {
 
 function getTextForBand(band) {
     var next = parseInt(band) + 1;
-    return `[ ${band}, ${next})`;
+    return `From ${band} to less than ${next} birth(s)`;
 }
 
 function addLegendAtTheEndOfLine(g, source, xScale, yScale) {
@@ -189,4 +217,27 @@ function addLegendAtTheEndOfLine(g, source, xScale, yScale) {
         .style("font-size", 15)
 }
 
+function wrap(text, width) {
+    text.each(function () {
+        var text = d3.select(this),
+            words = text.text().split(/\s+/).reverse(),
+            word,
+            line = [],
+            lineNumber = 0,
+            lineHeight = 1.1, // ems
+            y = text.attr("y"),
+            dy = parseFloat(text.attr("dy")),
+            tspan = text.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "em");
+        while (word = words.pop()) {
+            line.push(word);
+            tspan.text(line.join(" "));
+            if (tspan.node().getComputedTextLength() > width) {
+                line.pop();
+                tspan.text(line.join(" "));
+                line = [word];
+                tspan = text.append("tspan").attr("x", 0).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+            }
+        }
+    });
+}
 renderChart();

@@ -10,3 +10,24 @@
     fill: grey;
     font-weight: 100;
 }
+
+.text_legend_inverse {
+    fill: white;
+}
+
+.full-container {
+    margin: 0 0 0 0;
+    opacity: 0.5;
+}
+
+.full-container p {
+    margin-top: 0;
+    margin-bottom: 0;
+    color: white;
+}
+
+.legend_header_box {
+    background-color: black;
+    margin-top: 0;
+    padding-top: 0;
+}
