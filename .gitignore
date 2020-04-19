@@ -1,0 +1,12 @@
+__pycache__/
+
+.installed.cfg
+bin
+develop-eggs
+dist
+downloads
+eggs
+parts
+tarea2/*.egg-info
+lib
+lib64
